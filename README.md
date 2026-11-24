@@ -141,9 +141,3 @@ Add your own numbers here after training (the script prints a confusion matrix a
 - N. Dalal and B. Triggs, *Histograms of Oriented Gradients for Human Detection*, CVPR 2005.
 - X. Liu et al., *HydraPlus-Net: Attentive Deep Features for Pedestrian Analysis*, ICCV 2017 (PA-100k).
 - INRIA Person Dataset, via Hugging Face: `marcelarosalesj/inria-person`.
-
-Please check the licences and terms of use of PA-100k and the INRIA dataset before redistributing any data or trained models.
-
-## License
-
-Add your licence here (for example MIT).
