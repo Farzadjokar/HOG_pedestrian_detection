@@ -19,7 +19,7 @@ A classic computer-vision pedestrian detector built from scratch: **Histogram of
 
 ## How it works
 
-**Training (`train_classifier.py`)**
+**Training (`Train_classifier.py`)**
 
 1. Reads PA-100k pedestrian crops (`train.csv`, `val.csv`, `test.csv`) as positives, resized to 64x128 and horizontally flipped for augmentation.
 2. Downloads person-free images from the INRIA dataset on Hugging Face and samples random windows as negatives (split by image into train / val / test to avoid leakage).
@@ -30,7 +30,7 @@ A classic computer-vision pedestrian detector built from scratch: **Histogram of
    - several rounds of **hard-negative mining**
 4. Trains a `LinearSVC`, prints validation and test reports, and saves the model.
 
-**Detection (`pedestrian_app.py`)**
+**Detection (`Pedestrian_app.py`)**
 
 1. Converts the image to grayscale and builds an image pyramid.
 2. Slides the 64x128 HOG window over every level using OpenCV's `HOGDescriptor` with the trained SVM weights.
@@ -41,10 +41,10 @@ A classic computer-vision pedestrian detector built from scratch: **Histogram of
 
 ```
 .
-├── train_classifier.py        # training script
-├── pedestrian_app.py          # Tkinter detection app
-├── pedestrian_hog_svm.npz     # trained weights (created by training)
-├── pedestrian_hog_svm.joblib  # full scikit-learn model (created by training)
+├── Train_classifier.py        # training script
+├── Pedestrian_app.py          # Tkinter detection app
+├── pedestrian_hog_svm.npz     # trained weights (used by the app)
+├── pedestrian_hog_svm.joblib  # full scikit-learn model
 ├── requirements.txt
 ├── assets/
 │   └── demo.png
@@ -56,12 +56,22 @@ A classic computer-vision pedestrian detector built from scratch: **Histogram of
 ## Installation
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/Farzadjokar/HOG_pedestrian_detection.git
+cd HOG_pedestrian_detection
 pip install -r requirements.txt
 ```
 
 Tkinter ships with Python on Windows and macOS. On Debian/Ubuntu: `sudo apt install python3-tk`.
+
+## Quick start (no training needed)
+
+The trained model (`pedestrian_hog_svm.npz`) is included, so you can run the app right away:
+
+```bash
+python Pedestrian_app.py
+```
+
+To train your own model, set up the dataset below.
 
 ## Dataset setup
 
@@ -83,7 +93,7 @@ The training script finds `train.csv` in the current folder (or in a `PA-100k/` 
 ## Train
 
 ```bash
-python train_classifier.py
+python Train_classifier.py
 ```
 
 This downloads the negative images on the first run (cached in `inria_negatives/`), trains the classifier, and writes `pedestrian_hog_svm.npz` and `pedestrian_hog_svm.joblib` to the current folder.
@@ -104,14 +114,14 @@ Useful options:
 ## Run the app
 
 ```bash
-python pedestrian_app.py
+python Pedestrian_app.py
 ```
 
 Click **Open Image**. The model is loaded automatically from the script's folder and detection starts immediately. **Save Result** stores the image with the boxes drawn on it.
 
 ### Tuning
 
-Constants at the top of `pedestrian_app.py`:
+Constants at the top of `Pedestrian_app.py`:
 
 | Constant | Effect |
 | --- | --- |
@@ -122,12 +132,7 @@ Constants at the top of `pedestrian_app.py`:
 
 ## Results
 
-Add your own numbers here after training (the script prints a confusion matrix and precision / recall for validation and test).
-
-| Split | Precision | Recall | F1 |
-| --- | --- | --- | --- |
-| Validation | | | |
-| Test | | | |
+In the demo image above, the detector finds both the adult and the child at the crosswalk (scores 1.40 and 1.16) and draws no boxes on the background. This is a single example, not a benchmark. At the end of training, `Train_classifier.py` prints a confusion matrix and precision / recall for the validation and test splits.
 
 ## Limitations
 
@@ -141,3 +146,5 @@ Add your own numbers here after training (the script prints a confusion matrix a
 - N. Dalal and B. Triggs, *Histograms of Oriented Gradients for Human Detection*, CVPR 2005.
 - X. Liu et al., *HydraPlus-Net: Attentive Deep Features for Pedestrian Analysis*, ICCV 2017 (PA-100k).
 - INRIA Person Dataset, via Hugging Face: `marcelarosalesj/inria-person`.
+
+Please check the licences and terms of use of PA-100k and the INRIA dataset before redistributing any data or trained models.
